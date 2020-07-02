@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace ConcediuAngajati.Models
 {
-    public class ConcediuAngajatiContext : DbContext
+    public class ConcediuAngajatiContext : IdentityDbContext<IdentityUser>
     {
-        public ConcediuAngajatiContext()
+        public ConcediuAngajatiContext() 
         {
         }
 
@@ -19,9 +21,8 @@ namespace ConcediuAngajati.Models
         public DbSet<Angajat> Angajati { get; set; }
         public DbSet<Concediu> Concedii { get; set; }
         public DbSet<AngajatConcediu> AngajatiConcedii { get; set; }
-        public DbSet<Functie> Functii { get; set; }
-        public DbSet<AngajatFunctie> AngajatiFunctii { get; set; }
         public DbSet<CerereConcediu> CereriConcediu { get; set; }
+        public DbSet<StatusCerere> StatusCereri { get; set; }
 
     }
 }

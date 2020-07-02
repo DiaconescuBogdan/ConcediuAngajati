@@ -4,14 +4,16 @@ using ConcediuAngajati.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ConcediuAngajati.Migrations
 {
     [DbContext(typeof(ConcediuAngajatiContext))]
-    partial class ConcediuAngajatiContextModelSnapshot : ModelSnapshot
+    [Migration("20200702100313_Identity")]
+    partial class Identity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

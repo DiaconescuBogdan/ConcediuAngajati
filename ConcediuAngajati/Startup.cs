@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ConcediuAngajati.Models;
+using ConcediuAngajati.Repositories;
+using ConcediuAngajati.Repositories.Interfaces;
+using ConcediuAngajati.Services;
+using ConcediuAngajati.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,6 +30,13 @@ namespace ConcediuAngajati
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddRazorPages();
+
+            services.AddTransient<IConcediuService, ConcediuService>();
+            services.AddTransient<IConcediuRepository, ConcediuRepository>();
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<ConcediuAngajatiContext>();
 
             var connection = @"Server=(localdb)\mssqllocaldb;Database=ConcediuAngajati;Trusted_Connection=True;ConnectRetryCount=0";
             services.AddDbContext<ConcediuAngajatiContext>
@@ -46,6 +58,7 @@ namespace ConcediuAngajati
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -53,6 +66,7 @@ namespace ConcediuAngajati
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }

@@ -13,6 +13,7 @@ namespace ConcediuAngajati.Models
         public string Descriere { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public StatusCerere StatusCerere { get; set; }
 
         public Angajat Angajat { get; set; }
     }

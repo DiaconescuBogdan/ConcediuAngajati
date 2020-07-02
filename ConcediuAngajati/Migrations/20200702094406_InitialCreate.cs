@@ -13,8 +13,8 @@ namespace ConcediuAngajati.Migrations
                 {
                     AngajatId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nume = table.Column<string>(nullable: true),
-                    Prenume = table.Column<string>(nullable: true),
+                    Nume = table.Column<string>(nullable: false),
+                    Prenume = table.Column<string>(nullable: false),
                     DataNastere = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -28,7 +28,7 @@ namespace ConcediuAngajati.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TipConcediu = table.Column<string>(nullable: true),
+                    TipConcediu = table.Column<string>(nullable: false),
                     NrZile = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -37,39 +37,17 @@ namespace ConcediuAngajati.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Functii",
+                name: "StatusCereri",
                 columns: table => new
                 {
-                    FunctieId = table.Column<int>(nullable: false)
+                    StatusId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TipFunctie = table.Column<string>(nullable: true),
-                    Descriere = table.Column<string>(nullable: true)
+                    Status = table.Column<string>(nullable: false),
+                    Descriere = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Functii", x => x.FunctieId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CereriConcediu",
-                columns: table => new
-                {
-                    CerereId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Descriere = table.Column<string>(nullable: true),
-                    StartDate = table.Column<DateTime>(nullable: false),
-                    EndDate = table.Column<DateTime>(nullable: false),
-                    AngajatId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CereriConcediu", x => x.CerereId);
-                    table.ForeignKey(
-                        name: "FK_CereriConcediu_Angajati_AngajatId",
-                        column: x => x.AngajatId,
-                        principalTable: "Angajati",
-                        principalColumn: "AngajatId",
-                        onDelete: ReferentialAction.Restrict);
+                    table.PrimaryKey("PK_StatusCereri", x => x.StatusId);
                 });
 
             migrationBuilder.CreateTable(
@@ -101,29 +79,32 @@ namespace ConcediuAngajati.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AngajatiFunctii",
+                name: "CereriConcediu",
                 columns: table => new
                 {
-                    AngajatFunctieId = table.Column<int>(nullable: false)
+                    CerereId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AngajatId = table.Column<int>(nullable: false),
-                    FunctieId = table.Column<int>(nullable: false)
+                    Descriere = table.Column<string>(nullable: true),
+                    StartDate = table.Column<DateTime>(nullable: false),
+                    EndDate = table.Column<DateTime>(nullable: false),
+                    StatusCerereStatusId = table.Column<int>(nullable: true),
+                    AngajatId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AngajatiFunctii", x => x.AngajatFunctieId);
+                    table.PrimaryKey("PK_CereriConcediu", x => x.CerereId);
                     table.ForeignKey(
-                        name: "FK_AngajatiFunctii_Angajati_AngajatId",
+                        name: "FK_CereriConcediu_Angajati_AngajatId",
                         column: x => x.AngajatId,
                         principalTable: "Angajati",
                         principalColumn: "AngajatId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_AngajatiFunctii_Functii_FunctieId",
-                        column: x => x.FunctieId,
-                        principalTable: "Functii",
-                        principalColumn: "FunctieId",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_CereriConcediu_StatusCereri_StatusCerereStatusId",
+                        column: x => x.StatusCerereStatusId,
+                        principalTable: "StatusCereri",
+                        principalColumn: "StatusId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -137,19 +118,14 @@ namespace ConcediuAngajati.Migrations
                 column: "ConcediuId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AngajatiFunctii_AngajatId",
-                table: "AngajatiFunctii",
-                column: "AngajatId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AngajatiFunctii_FunctieId",
-                table: "AngajatiFunctii",
-                column: "FunctieId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CereriConcediu_AngajatId",
                 table: "CereriConcediu",
                 column: "AngajatId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CereriConcediu_StatusCerereStatusId",
+                table: "CereriConcediu",
+                column: "StatusCerereStatusId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -158,19 +134,16 @@ namespace ConcediuAngajati.Migrations
                 name: "AngajatiConcedii");
 
             migrationBuilder.DropTable(
-                name: "AngajatiFunctii");
-
-            migrationBuilder.DropTable(
                 name: "CereriConcediu");
 
             migrationBuilder.DropTable(
                 name: "Concedii");
 
             migrationBuilder.DropTable(
-                name: "Functii");
+                name: "Angajati");
 
             migrationBuilder.DropTable(
-                name: "Angajati");
+                name: "StatusCereri");
         }
     }
 }

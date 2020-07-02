@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConcediuAngajati.Migrations
 {
     [DbContext(typeof(ConcediuAngajatiContext))]
-    [Migration("20200625103338_InitialCreate")]
+    [Migration("20200702094406_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,28 +70,6 @@ namespace ConcediuAngajati.Migrations
                     b.ToTable("AngajatiConcedii");
                 });
 
-            modelBuilder.Entity("ConcediuAngajati.Models.AngajatFunctie", b =>
-                {
-                    b.Property<int>("AngajatFunctieId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AngajatId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FunctieId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AngajatFunctieId");
-
-                    b.HasIndex("AngajatId");
-
-                    b.HasIndex("FunctieId");
-
-                    b.ToTable("AngajatiFunctii");
-                });
-
             modelBuilder.Entity("ConcediuAngajati.Models.CerereConcediu", b =>
                 {
                     b.Property<int>("CerereId")
@@ -111,9 +89,14 @@ namespace ConcediuAngajati.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("StatusCerereStatusId")
+                        .HasColumnType("int");
+
                     b.HasKey("CerereId");
 
                     b.HasIndex("AngajatId");
+
+                    b.HasIndex("StatusCerereStatusId");
 
                     b.ToTable("CereriConcediu");
                 });
@@ -136,9 +119,9 @@ namespace ConcediuAngajati.Migrations
                     b.ToTable("Concedii");
                 });
 
-            modelBuilder.Entity("ConcediuAngajati.Models.Functie", b =>
+            modelBuilder.Entity("ConcediuAngajati.Models.StatusCerere", b =>
                 {
-                    b.Property<int>("FunctieId")
+                    b.Property<int>("StatusId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -146,12 +129,12 @@ namespace ConcediuAngajati.Migrations
                     b.Property<string>("Descriere")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TipFunctie")
+                    b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("FunctieId");
+                    b.HasKey("StatusId");
 
-                    b.ToTable("Functii");
+                    b.ToTable("StatusCereri");
                 });
 
             modelBuilder.Entity("ConcediuAngajati.Models.AngajatConcediu", b =>
@@ -169,26 +152,15 @@ namespace ConcediuAngajati.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ConcediuAngajati.Models.AngajatFunctie", b =>
-                {
-                    b.HasOne("ConcediuAngajati.Models.Angajat", "Angajat")
-                        .WithMany()
-                        .HasForeignKey("AngajatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ConcediuAngajati.Models.Functie", "Functie")
-                        .WithMany("AngajatiFunctii")
-                        .HasForeignKey("FunctieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("ConcediuAngajati.Models.CerereConcediu", b =>
                 {
                     b.HasOne("ConcediuAngajati.Models.Angajat", "Angajat")
                         .WithMany("CereriConcediu")
                         .HasForeignKey("AngajatId");
+
+                    b.HasOne("ConcediuAngajati.Models.StatusCerere", "StatusCerere")
+                        .WithMany("CereriConcediu")
+                        .HasForeignKey("StatusCerereStatusId");
                 });
 #pragma warning restore 612, 618
         }
