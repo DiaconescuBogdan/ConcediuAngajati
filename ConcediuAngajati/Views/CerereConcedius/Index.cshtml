@@ -1,0 +1,85 @@
+﻿@model IEnumerable<ConcediuAngajati.Models.CerereConcediu>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+@if (User.IsInRole("Rol operational"))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TipConcediu)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descriere)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StatusCerere)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Angajat.Nume)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Angajat.Prenume)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TipConcediu)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descriere)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StatusCerere.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Angajat.Nume)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Angajat.Prenume)
+            </td>
+            @if (User.IsInRole("Rol operational"))
+            {
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.CerereId">Details</a> |
+                    <a asp-action="Close" asp-route-id="@item.CerereId">Close</a>
+                </td>
+            }
+            @if (User.IsInRole("Manager"))
+            {
+                <td>
+                    <a asp-action="Accept" asp-route-id="@item.CerereId">Accept</a> |
+                    <a asp-action="Reject" asp-route-id="@item.CerereId">Reject</a> |
+                    <a asp-action="Details" asp-route-id="@item.CerereId">Details</a> 
+                </td>
+            }
+            </tr>
+        }
+    </tbody>
+</table>

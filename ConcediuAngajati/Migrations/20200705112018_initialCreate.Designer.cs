@@ -4,14 +4,16 @@ using ConcediuAngajati.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ConcediuAngajati.Migrations
 {
     [DbContext(typeof(ConcediuAngajatiContext))]
-    partial class ConcediuAngajatiContextModelSnapshot : ModelSnapshot
+    [Migration("20200705112018_initialCreate")]
+    partial class initialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,7 +83,7 @@ namespace ConcediuAngajati.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AngajatId")
+                    b.Property<int?>("AngajatId")
                         .HasColumnType("int");
 
                     b.Property<string>("Descriere")
@@ -93,17 +95,17 @@ namespace ConcediuAngajati.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("StatusCerereId")
+                    b.Property<int?>("StatusCerereStatusId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TipConcediu")
-                        .HasColumnType("int");
+                    b.Property<string>("TipConcediu")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CerereId");
 
                     b.HasIndex("AngajatId");
 
-                    b.HasIndex("StatusCerereId");
+                    b.HasIndex("StatusCerereStatusId");
 
                     b.ToTable("CereriConcediu");
                 });
@@ -359,15 +361,11 @@ namespace ConcediuAngajati.Migrations
                 {
                     b.HasOne("ConcediuAngajati.Models.Angajat", "Angajat")
                         .WithMany("CereriConcediu")
-                        .HasForeignKey("AngajatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AngajatId");
 
                     b.HasOne("ConcediuAngajati.Models.StatusCerere", "StatusCerere")
                         .WithMany("CereriConcediu")
-                        .HasForeignKey("StatusCerereId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StatusCerereStatusId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

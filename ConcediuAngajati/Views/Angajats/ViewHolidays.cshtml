@@ -1,0 +1,53 @@
+﻿@model IEnumerable<ConcediuAngajati.Models.AngajatConcediu>
+
+@{
+    ViewData["Title"] = "ViewHolidays";
+}
+
+<h1>ViewHolidays</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Angajat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Concediu)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ZileConcediuDisponibile)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ZileConcediuUtilizate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Angajat.AngajatId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Concediu.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ZileConcediuDisponibile)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ZileConcediuUtilizate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.AngajatConcediuId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.AngajatConcediuId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.AngajatConcediuId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

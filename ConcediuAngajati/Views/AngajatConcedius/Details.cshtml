@@ -1,0 +1,47 @@
+﻿@model ConcediuAngajati.Models.AngajatConcediu
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>AngajatConcediu</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Angajat.Nume)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Angajat.Nume)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Angajat.Prenume)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Angajat.Prenume)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Concediu)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Concediu.TipConcediu)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ZileConcediuDisponibile)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ZileConcediuDisponibile)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ZileConcediuUtilizate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ZileConcediuUtilizate)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

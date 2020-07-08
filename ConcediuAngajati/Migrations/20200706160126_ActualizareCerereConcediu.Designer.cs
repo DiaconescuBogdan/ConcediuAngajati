@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConcediuAngajati.Migrations
 {
     [DbContext(typeof(ConcediuAngajatiContext))]
-    [Migration("20200702100313_Identity")]
-    partial class Identity
+    [Migration("20200706160126_ActualizareCerereConcediu")]
+    partial class ActualizareCerereConcediu
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,6 +30,12 @@ namespace ConcediuAngajati.Migrations
 
                     b.Property<DateTime>("DataNastere")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Functie")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("InConcediu")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Nume")
                         .HasColumnType("nvarchar(max)");
@@ -77,7 +83,7 @@ namespace ConcediuAngajati.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AngajatId")
+                    b.Property<int>("AngajatId")
                         .HasColumnType("int");
 
                     b.Property<string>("Descriere")
@@ -89,14 +95,17 @@ namespace ConcediuAngajati.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("StatusCerereStatusId")
+                    b.Property<int>("StatusCerereId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TipConcediu")
                         .HasColumnType("int");
 
                     b.HasKey("CerereId");
 
                     b.HasIndex("AngajatId");
 
-                    b.HasIndex("StatusCerereStatusId");
+                    b.HasIndex("StatusCerereId");
 
                     b.ToTable("CereriConcediu");
                 });
@@ -352,11 +361,15 @@ namespace ConcediuAngajati.Migrations
                 {
                     b.HasOne("ConcediuAngajati.Models.Angajat", "Angajat")
                         .WithMany("CereriConcediu")
-                        .HasForeignKey("AngajatId");
+                        .HasForeignKey("AngajatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ConcediuAngajati.Models.StatusCerere", "StatusCerere")
                         .WithMany("CereriConcediu")
-                        .HasForeignKey("StatusCerereStatusId");
+                        .HasForeignKey("StatusCerereId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

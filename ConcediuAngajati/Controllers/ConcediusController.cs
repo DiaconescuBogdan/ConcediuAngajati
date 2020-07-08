@@ -1,36 +1,41 @@
-﻿using ConcediuAngajati.Models;
-using ConcediuAngajati.Services.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using ConcediuAngajati.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ConcediuAngajati.Controllers
 {
-    public class ConcediuController : Controller
+    [Authorize(Roles = "Resurse umane, Rol operational")]
+    public class ConcediusController : Controller
     {
-        private IConcediuService _concediuService;
+        private readonly ConcediuAngajatiContext _context;
 
-        public ConcediuController(IConcediuService concediuService)
+        public ConcediusController(ConcediuAngajatiContext context)
         {
-            _concediuService = concediuService;
+            _context = context;
         }
+
+        // GET: Concedius
         public async Task<IActionResult> Index()
         {
-            var concediu = await _concediuService.GetAllConcediu();
-            return View(concediu);
+            return View(await _context.Concedii.ToListAsync());
         }
 
-        // GET: Posts/Details/5
+        // GET: Concedius/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            var concediu = await _concediuService.GetConcediuById(id);
+
+            var concediu = await _context.Concedii
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (concediu == null)
             {
                 return NotFound();
@@ -39,47 +44,50 @@ namespace ConcediuAngajati.Controllers
             return View(concediu);
         }
 
-        // GET: Posts/Create
+        // GET: Concedius/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Posts/Create
+        // POST: Concedius/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id, TipConcediu, NrZile, AngajatiConcedii")] Concediu concediu)
+        public async Task<IActionResult> Create([Bind("Id,TipConcediu,NrZile")] Concediu concediu)
         {
             if (ModelState.IsValid)
             {
-                await _concediuService.CreateConcediu(concediu);
+                _context.Add(concediu);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-
             }
             return View(concediu);
-
         }
 
-        // GET: Posts/Edit/5
+        // GET: Concedius/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            var concediu = await _concediuService.GetConcediuById(id);
+
+            var concediu = await _context.Concedii.FindAsync(id);
             if (concediu == null)
             {
                 return NotFound();
             }
-
             return View(concediu);
         }
 
-        // POST: Posts/Edit/5
+        // POST: Concedius/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id, TipConcediu, NrZile, AngajatiConcedii")]Concediu concediu)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,TipConcediu,NrZile")] Concediu concediu)
         {
             if (id != concediu.Id)
             {
@@ -90,11 +98,12 @@ namespace ConcediuAngajati.Controllers
             {
                 try
                 {
-                    await _concediuService.UpdateConcediu(id, concediu);
+                    _context.Update(concediu);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_concediuService.ConcediuExists(concediu.Id))
+                    if (!ConcediuExists(concediu.Id))
                     {
                         return NotFound();
                     }
@@ -105,18 +114,19 @@ namespace ConcediuAngajati.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-
             return View(concediu);
         }
 
-        // GET: Posts/Delete/5
+        // GET: Concedius/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            var concediu = await _concediuService.GetConcediuById(id);
+
+            var concediu = await _context.Concedii
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (concediu == null)
             {
                 return NotFound();
@@ -125,14 +135,20 @@ namespace ConcediuAngajati.Controllers
             return View(concediu);
         }
 
-        // POST: Posts/Delete/5
-        [HttpPost]
+        // POST: Concedius/Delete/5
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _concediuService.DeleteConcediu(id);
+            var concediu = await _context.Concedii.FindAsync(id);
+            _context.Concedii.Remove(concediu);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        private bool ConcediuExists(int id)
+        {
+            return _context.Concedii.Any(e => e.Id == id);
         }
     }
 }
-

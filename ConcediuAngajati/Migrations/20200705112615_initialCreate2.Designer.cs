@@ -4,14 +4,16 @@ using ConcediuAngajati.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ConcediuAngajati.Migrations
 {
     [DbContext(typeof(ConcediuAngajatiContext))]
-    partial class ConcediuAngajatiContextModelSnapshot : ModelSnapshot
+    [Migration("20200705112615_initialCreate2")]
+    partial class initialCreate2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,8 +98,8 @@ namespace ConcediuAngajati.Migrations
                     b.Property<int>("StatusCerereId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TipConcediu")
-                        .HasColumnType("int");
+                    b.Property<string>("TipConcediu")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CerereId");
 

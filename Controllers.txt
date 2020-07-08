@@ -1,0 +1,540 @@
+public class AngajatConcediuController : Controller
+    {
+        private IAngajatConcediuService _angajatConcediuService;
+
+        public AngajatConcediuController(IAngajatConcediuService concediuService)
+        {
+            _angajatConcediuService = concediuService;
+        }
+        public async Task<IActionResult> Index()
+        {
+            var concediu = await _angajatConcediuService.GetAllAngajatConcediu();
+            return View(concediu);
+        }
+
+        // GET: Posts/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var concediu = await _angajatConcediuService.GetAngajatConcediuById(id);
+            if (concediu == null)
+            {
+                return NotFound();
+            }
+
+            return View(concediu);
+        }
+
+        // GET: Posts/Search
+        public IActionResult Search(){
+
+            return View();
+        }
+
+        // POST: Posts/Search
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Search(string name)
+        {
+            var ac = await _angajatConcediuService.GetAngajatConcediuByName(name);
+            return View(ac);
+
+        }
+
+        // GET: Posts/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Posts/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id, TipConcediu, NrZile, AngajatiConcedii")] AngajatConcediu concediu)
+        {
+            if (ModelState.IsValid)
+            {
+                await _angajatConcediuService.CreateAngajatConcediu(concediu);
+                return RedirectToAction(nameof(Index));
+
+            }
+            return View(concediu);
+
+        }
+
+        // GET: Posts/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var concediu = await _angajatConcediuService.GetAngajatConcediuById(id);
+            if (concediu == null)
+            {
+                return NotFound();
+            }
+
+            return View(concediu);
+        }
+
+        // POST: Posts/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id, TipConcediu, NrZile, AngajatiConcedii")]AngajatConcediu concediu)
+        {
+            if (id != concediu.AngajatConcediuId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _angajatConcediuService.UpdateAngajatConcediu(id, concediu);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_angajatConcediuService.AngajatConcediuExists(concediu.AngajatConcediuId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(concediu);
+        }
+
+        // GET: Posts/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var concediu = await _angajatConcediuService.GetAngajatConcediuById(id);
+            if (concediu == null)
+            {
+                return NotFound();
+            }
+
+            return View(concediu);
+        }
+
+        // POST: Posts/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            await _angajatConcediuService.DeleteAngajatConcediu(id);
+            return RedirectToAction(nameof(Index));
+        }
+    }
+	
+	
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+public class ConcediuController : Controller
+    {
+        private IConcediuService _concediuService;
+
+        public ConcediuController(IConcediuService concediuService)
+        {
+            _concediuService = concediuService;
+        }
+        public async Task<IActionResult> Index()
+        {
+            var concediu = await _concediuService.GetAllConcediu();
+            return View(concediu);
+        }
+
+        // GET: Posts/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var concediu = await _concediuService.GetConcediuById(id);
+            if (concediu == null)
+            {
+                return NotFound();
+            }
+
+            return View(concediu);
+        }
+
+        // GET: Posts/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Posts/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Id, TipConcediu, NrZile, AngajatiConcedii")] Concediu concediu)
+        {
+            if (ModelState.IsValid)
+            {
+                await _concediuService.CreateConcediu(concediu);
+                return RedirectToAction(nameof(Index));
+
+            }
+            return View(concediu);
+
+        }
+
+        // GET: Posts/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var concediu = await _concediuService.GetConcediuById(id);
+            if (concediu == null)
+            {
+                return NotFound();
+            }
+
+            return View(concediu);
+        }
+
+        // POST: Posts/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id, TipConcediu, NrZile, AngajatiConcedii")]Concediu concediu)
+        {
+            if (id != concediu.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _concediuService.UpdateConcediu(id, concediu);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_concediuService.ConcediuExists(concediu.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(concediu);
+        }
+
+        // GET: Posts/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var concediu = await _concediuService.GetConcediuById(id);
+            if (concediu == null)
+            {
+                return NotFound();
+            }
+
+            return View(concediu);
+        }
+
+        // POST: Posts/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            await _concediuService.DeleteConcediu(id);
+            return RedirectToAction(nameof(Index));
+        }
+    }
+	
+//////////////////////////////////////////////////////////////////////////////////////////
+
+public class CerereConcediuController : Controller
+    {
+        private ICerereConcediuService _cerereConcediuService;
+        private IConcediuService _concediuService;
+
+
+        public CerereConcediuController(ICerereConcediuService cerereConcediuService, IConcediuService concediuService)
+        {
+            _cerereConcediuService = cerereConcediuService;
+            _concediuService = concediuService;
+        }
+        public async Task<IActionResult> Index()
+        {
+            var concediu = await _cerereConcediuService.GetAllCerereConcediu();
+            return View(concediu);
+        }
+
+        // GET: Posts/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var concediu = await _cerereConcediuService.GetCerereConcediuById(id);
+            if (concediu == null)
+            {
+                return NotFound();
+            }
+
+            return View(concediu);
+        }
+
+        // GET: Posts/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Posts/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("CerereId, TipConcediu, Descriere, StartDate, EndDate, StatusCerereId, AngajatId")] CerereConcediu concediu)
+        {
+            if (ModelState.IsValid)
+            {
+                await _cerereConcediuService.CreateCerereConcediu(concediu);
+                return RedirectToAction(nameof(Index));
+
+            }
+            return View(concediu);
+
+        }
+
+        // GET: Posts/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var concediu = await _cerereConcediuService.GetCerereConcediuById(id);
+            if (concediu == null)
+            {
+                return NotFound();
+            }
+
+            return View(concediu);
+        }
+
+        // POST: Posts/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("CerereId, TipConcediu, Descriere, StartDate, EndDate, StatusCerereId, AngajatId")]CerereConcediu concediu)
+        {
+            if (id != concediu.CerereId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _cerereConcediuService.UpdateCerereConcediu(id, concediu);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_cerereConcediuService.CerereConcediuExists(concediu.CerereId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(concediu);
+        }
+
+        // GET: Posts/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var concediu = await _cerereConcediuService.GetCerereConcediuById(id);
+            if (concediu == null)
+            {
+                return NotFound();
+            }
+
+            return View(concediu);
+        }
+
+        // POST: Posts/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            await _cerereConcediuService.DeleteCerereConcediu(id);
+            return RedirectToAction(nameof(Index));
+        }
+
+        //public async Task<IActionResult> Accept(int id)
+        //{
+        //    var cerereConcediu = await _cerereConcediuService.GetCerereConcediuById(id);
+        //    _concediuService.CreateConcediu(cerereConcediu);
+
+
+
+
+        //}
+    }
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+public class StatusCerereController : Controller
+    {
+        private IStatusCerereService _concediuService;
+
+        public StatusCerereController(IStatusCerereService concediuService)
+        {
+            _concediuService = concediuService;
+        }
+        public async Task<IActionResult> Index()
+        {
+            var concediu = await _concediuService.GetAllStatusCerere();
+            return View(concediu);
+        }
+
+        // GET: Posts/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var concediu = await _concediuService.GetStatusCerereById(id);
+            if (concediu == null)
+            {
+                return NotFound();
+            }
+
+            return View(concediu);
+        }
+
+        // GET: Posts/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Posts/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("StatusId, Status, Descriere, CereriConcediu")] StatusCerere concediu)
+        {
+            if (ModelState.IsValid)
+            {
+                await _concediuService.CreateStatusCerere(concediu);
+                return RedirectToAction(nameof(Index));
+
+            }
+            return View(concediu);
+
+        }
+
+        // GET: Posts/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var concediu = await _concediuService.GetStatusCerereById(id);
+            if (concediu == null)
+            {
+                return NotFound();
+            }
+
+            return View(concediu);
+        }
+
+        // POST: Posts/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("StatusId, Status, Descriere, CereriConcediu")]StatusCerere concediu)
+        {
+            if (id != concediu.StatusId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _concediuService.UpdateStatusCerere(id, concediu);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_concediuService.StatusCerereExists(concediu.StatusId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(concediu);
+        }
+
+        // GET: Posts/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var concediu = await _concediuService.GetStatusCerereById(id);
+            if (concediu == null)
+            {
+                return NotFound();
+            }
+
+            return View(concediu);
+        }
+
+        // POST: Posts/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            await _concediuService.DeleteStatusCerere(id);
+            return RedirectToAction(nameof(Index));
+        }
+    }

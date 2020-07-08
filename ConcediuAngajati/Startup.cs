@@ -32,8 +32,17 @@ namespace ConcediuAngajati
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            services.AddTransient<IConcediuService, ConcediuService>();
-            services.AddTransient<IConcediuRepository, ConcediuRepository>();
+            //services.AddTransient<IAngajatConcediuService, AngajatConcediuService>();
+            //services.AddTransient<IAngajatConcediuRepository, AngajatConcediuRepository>();
+
+            //services.AddTransient<IStatusCerereService, StatusCerereService>();
+            //services.AddTransient<IStatusCerereRepository, StatusCerereRepository>();
+
+            //services.AddTransient<IConcediuService, ConcediuService>();
+            //services.AddTransient<IConcediuRepository, ConcediuRepository>();
+
+            //services.AddTransient<ICerereConcediuService, CerereConcediuService>();
+            //services.AddTransient<ICerereConcediuRepository, CerereConcediuRepository>();
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<ConcediuAngajatiContext>();

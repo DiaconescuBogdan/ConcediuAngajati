@@ -10,11 +10,15 @@ namespace ConcediuAngajati.Models
     {
         [Key]
         public int CerereId { get; set; }
+        public int TipConcediu { get; set; }
         public string Descriere { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        
+        public int StatusCerereId { get; set; }
         public StatusCerere StatusCerere { get; set; }
 
+        public int AngajatId { get; set; }
         public Angajat Angajat { get; set; }
     }
 }

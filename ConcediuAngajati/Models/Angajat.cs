@@ -13,6 +13,8 @@ namespace ConcediuAngajati.Models
         public string Nume { get; set; }
         public string Prenume { get; set; }
         public DateTime DataNastere { get; set; }
+        public string Functie { get; set; }
+        public bool InConcediu { get; set; }
 
 
         public ICollection<AngajatConcediu> AngajatiConcedii { get; set; }
