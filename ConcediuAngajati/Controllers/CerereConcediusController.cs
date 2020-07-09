@@ -163,31 +163,25 @@ namespace ConcediuAngajati.Controllers
         public async Task<IActionResult> Accept(int id)
         {
             var cerereConcediu = await _context.CereriConcediu.FindAsync(id);
-
-            //if(cerereConcediu == _context.CereriConcediu.Where(e => e.AngajatId == cerereConcediu.AngajatId))
-            //{
-            //    CerereConcediu cerereConcediuExistenta = _context.CereriConcediu.Where(e => e.AngajatId == cerereConcediu.AngajatId);
-            //    var concediu = await _context.Concedii.FindAsync(cerereConcediuExistenta.TipConcediu);
-            //    var ac = await _context.AngajatiConcedii.FindAsync(cerereConcediu.AngajatId);
-            //    var angajat = await _context.Angajati.FindAsync(cerereConcediu.AngajatId);
-            //}
             var concediu = await _context.Concedii.FindAsync(cerereConcediu.TipConcediu);
+
             var ac = await _context.AngajatiConcedii.FindAsync(cerereConcediu.AngajatId);
+            if (ac == null)
+            {
+                ac = new AngajatConcediu();
+                ac.ZileConcediuDisponibile = concediu.NrZile;
+            }
+
             var angajat = await _context.Angajati.FindAsync(cerereConcediu.AngajatId);
 
             var nrZileSplocitate = cerereConcediu.EndDate.Subtract(cerereConcediu.StartDate).TotalDays;
-            ac.ZileConcediuUtilizate = ac.ZileConcediuUtilizate + Convert.ToInt32(nrZileSplocitate);
+            ac.ZileConcediuUtilizate += Convert.ToInt32(nrZileSplocitate);
             ac.ZileConcediuDisponibile = concediu.NrZile - Convert.ToInt32(nrZileSplocitate);
 
-            if (ac.ZileConcediuDisponibile >= concediu.NrZile)
+            if (ac.ZileConcediuUtilizate <= concediu.NrZile)
             {
                 angajat.InConcediu = true;
                 cerereConcediu.StatusCerere = _context.StatusCereri.Find(4);
-                if (ac == null)
-                {
-                    ac = new AngajatConcediu();
-                }
-
                 ac.AngajatId = cerereConcediu.AngajatId;
                 ac.ConcediuId = cerereConcediu.TipConcediu;
 
@@ -196,6 +190,7 @@ namespace ConcediuAngajati.Controllers
             }  else
             {
                cerereConcediu.StatusCerere = _context.StatusCereri.Find(3);
+                await _context.SaveChangesAsync();
             }          
 
             return RedirectToAction(nameof(Index));
@@ -253,5 +248,43 @@ namespace ConcediuAngajati.Controllers
         {
             return _context.CereriConcediu.Any(e => e.CerereId == id);
         }
+
+
+        //public async Task<IActionResult> Accept(int cerereId, int concediuId, int angajatId)
+        //{
+        //    var cerereConcediu = await _context.CereriConcediu.FindAsync(cerereId);
+        //    var concediu = await _context.Concedii.FindAsync(concediuId);
+        //    var ac = _context.AngajatiConcedii.Where(e => e.ConcediuId == concediuId && e.ConcediuId == concediuId).FirstOrDefault();
+        //    if (ac == null)
+        //    {
+        //        ac = new AngajatConcediu();
+        //        ac.ZileConcediuDisponibile = concediu.NrZile;
+        //        ac.ZileConcediuUtilizate = 0;
+        //    }
+
+        //    var angajat = await _context.Angajati.FindAsync(angajatId);
+
+        //    var nrZileSolicitate = cerereConcediu.EndDate.Subtract(cerereConcediu.StartDate).TotalDays;
+        //    ac.ZileConcediuUtilizate += Convert.ToInt32(nrZileSolicitate);
+        //    ac.ZileConcediuDisponibile -= Convert.ToInt32(nrZileSolicitate);
+
+        //    if (ac.ZileConcediuUtilizate < concediu.NrZile)
+        //    {
+        //        angajat.InConcediu = true;
+        //        cerereConcediu.StatusCerere = _context.StatusCereri.Find(4);
+        //        //ac.AngajatId = cerereConcediu.AngajatId;
+        //        //ac.ConcediuId = cerereConcediu.TipConcediu;
+
+        //        _context.Add(ac);
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    else
+        //    {
+        //        cerereConcediu.StatusCerere = _context.StatusCereri.Find(3);
+        //        await _context.SaveChangesAsync();
+        //    }
+
+        //    return RedirectToAction(nameof(Index));
+        //}
     }
 }

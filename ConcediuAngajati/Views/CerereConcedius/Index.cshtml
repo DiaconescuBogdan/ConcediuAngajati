@@ -74,7 +74,9 @@
             @if (User.IsInRole("Manager"))
             {
                 <td>
-                    <a asp-action="Accept" asp-route-id="@item.CerereId">Accept</a> |
+                    <a asp-action="Accept" asp-route-id="@item.CerereId" 
+                       asp-route-tipconcediu ="@item.TipConcediu"
+                       asp-route-angajatid="@item.Angajat.AngajatId">Accept</a> |
                     <a asp-action="Reject" asp-route-id="@item.CerereId">Reject</a> |
                     <a asp-action="Details" asp-route-id="@item.CerereId">Details</a> 
                 </td>

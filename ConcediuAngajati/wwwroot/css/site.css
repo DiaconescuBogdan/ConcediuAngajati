@@ -70,9 +70,9 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
-    background-image: url("../img/sea-2755908_1920.jpg");
+    background-image: url("../img/bg2.jpg");
     background-repeat: no-repeat;
-    background-size: auto;
+    background-size: cover;
 }
 .footer {
   position: absolute;
